@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net7.0</TargetFrameworks>
+        <EnableDynamicLoading>true</EnableDynamicLoading>
+        <TargetExt>.gha</TargetExt>
+        <NoWarn>NU1701</NoWarn>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Specifies information for Assembly and Yak -->
+        <Version>1.0</Version>
+        <Title>GrasshopperMCP</Title>
+        <Company>GrasshopperMCP Authors</Company>
+        <Description>Description of GrasshopperMCP</Description>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime"/>
+    </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+        <Exec Command="cp $(TargetDir)GrasshopperMCP.gha '/Users/chen/Library/Application Support/McNeel/Rhinoceros/8.0/Plug-ins/Grasshopper (b45a29b1-4343-4035-989e-044e8580d9cf)/Libraries'" />
+    </Target>
+
+</Project>
