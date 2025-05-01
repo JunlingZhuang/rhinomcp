@@ -13,10 +13,10 @@ namespace GrasshopperMCP.Functions;
 public partial class GrasshopperMCPFunctions
 {
     private GH_Document doc;
-    
-    public GrasshopperMCPFunctions()
+
+    public GrasshopperMCPFunctions(GH_Document doc)
     {
-        doc = Instances.ActiveCanvas.Document;
+        this.doc = doc;
     }
 
     private double castToDouble(JToken token)

@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Text.Json;
+using Grasshopper.Kernel;
 using GrasshopperMCP.Functions;
 using Rhino.DocObjects;
 using JsonException = Newtonsoft.Json.JsonException;
@@ -35,14 +36,14 @@ namespace GrasshopperMCP
 
         private ObservableCollection<string> logs;
 
-        public GrasshopperMCPServer(ObservableCollection<string> logs, string host = "127.0.0.1", int port = 2000)
+        public GrasshopperMCPServer(GH_Document doc, ObservableCollection<string> logs, string host = "127.0.0.1", int port = 2000)
         {
             this.host = host;
             this.port = port;
             this.running = false;
             this.listener = null;
             this.serverThread = null;
-            this.handler = new GrasshopperMCPFunctions();
+            this.handler = new GrasshopperMCPFunctions(doc);
             this.logs = logs;
         }
 

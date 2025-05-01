@@ -30,7 +30,7 @@ namespace GrasshopperMCP
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-
+            pManager.AddBooleanParameter("Reset", "R", "Reset the MCP server", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -48,16 +48,30 @@ namespace GrasshopperMCP
         /// to store data in output parameters.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            bool reset = false;
+            if (!DA.GetData(0, ref reset)) return;
+
             if (serverController == null)
             {
-                serverController = new GrasshopperMCPServerController(logs);
-                logs.CollectionChanged += (sender, e) =>
-                {
-                    DA.SetDataList(0, logs);
-                };
+                var doc = Instances.ActiveCanvas.Document;
+                serverController = new GrasshopperMCPServerController(doc,logs);
             }
 
+            if (!serverController.IsServerRunning())
+            {
+                serverController.StartServer();
+            }
 
+            // if (serverController == null)
+            // {
+            //     
+            //     logs.CollectionChanged += (sender, e) =>
+            //     {
+            //         DA.SetDataList(0, logs);
+            //     };
+            // }
+
+            DA.SetDataList(0, logs);
             serverController.StartServer();
         }
 

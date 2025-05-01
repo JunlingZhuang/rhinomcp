@@ -16,16 +16,16 @@ public partial class GrasshopperMCPFunctions
         var component = new GH_NumberSlider();
         component.SetInitCode("0.0 < 0.5 < 1.0");
         
-
+        if (component.Attributes == null) component.CreateAttributes();
         component.Attributes.Pivot = new System.Drawing.PointF((float)100, (float)100);
                         
-        // 添加到文檔
+
         doc.AddObject(component, false);
                         
-        // 刷新畫布
+ 
         doc.NewSolution(false);
                         
-        // 返回組件信息
+
         return new JObject()
         {
             ["id"] = component.InstanceGuid.ToString(),
