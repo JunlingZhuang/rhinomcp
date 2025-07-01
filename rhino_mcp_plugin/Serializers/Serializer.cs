@@ -45,12 +45,36 @@ namespace rhinomcp.Serializers
 
         public static JObject SerializeCurve(Curve crv)
         {
+            // Get sample points from the curve (Rhino 7 compatible)
+            var points = new List<Point3d>();
+            
+            // Try to convert to NURBS curve first
+            var nurbsCurve = crv.ToNurbsCurve();
+            if (nurbsCurve != null)
+            {
+                // Use NURBS control points
+                for (int i = 0; i < nurbsCurve.Points.Count; i++)
+                {
+                    points.Add(nurbsCurve.Points[i].Location);
+                }
+            }
+            else
+            {
+                // For curves that can't be converted to NURBS, sample points along the curve
+                var sampleCount = 10;
+                for (int i = 0; i <= sampleCount; i++)
+                {
+                    var t = crv.Domain.Min + (crv.Domain.Max - crv.Domain.Min) * i / sampleCount;
+                    points.Add(crv.PointAt(t));
+                }
+            }
+
             return new JObject
             {
                 ["type"] = "Curve",
                 ["geometry"] = new JObject
                 {
-                    ["points"] = SerializePoints(crv.ControlPolygon().ToArray()),
+                    ["points"] = SerializePoints(points),
                     ["degree"] = crv.Degree.ToString()
                 }
             };
@@ -121,9 +145,17 @@ namespace rhinomcp.Serializers
             else if (obj.Geometry is Rhino.Geometry.PolylineCurve polyline)
             {
                 objInfo["type"] = "POLYLINE";
+                
+                // Get points from polyline (Rhino 7 compatible)
+                var points = new List<Point3d>();
+                for (int i = 0; i < polyline.PointCount; i++)
+                {
+                    points.Add(polyline.Point(i));
+                }
+                
                 objInfo["geometry"] = new JObject
                 {
-                    ["points"] = SerializePoints(polyline.ToArray())
+                    ["points"] = SerializePoints(points)
                 };
             }
             else if (obj.Geometry is Rhino.Geometry.Curve curve)

@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	
   <PropertyGroup>
-    <TargetFrameworks>net7.0</TargetFrameworks>
+    <TargetFrameworks>net48</TargetFrameworks>
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <TargetExt>.rhp</TargetExt>
     <NoWarn>NU1701</NoWarn>
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup>
@@ -17,7 +18,7 @@
   
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="RhinoCommon" Version="8.17.25066.7001" ExcludeAssets="runtime" />
+    <PackageReference Include="RhinoCommon" Version="7.33.23306.15001" ExcludeAssets="runtime" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([MSBuild]::IsOSPlatform('OSX'))">
